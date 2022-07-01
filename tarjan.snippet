@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>tarjan</Title>
+            <Shortcut>tarjan</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+vector<ll> g[N];
+ll num[N], low[N], scc[N], inde, tot;
+stack<ll> st;
+bool vis[N];
+void tarjan(ll u) {
+    vis[u] = 1;
+    low[u] = num[u] = ++inde;
+    st.push(u);
+    for (auto v : g[u]) {
+        if (!num[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        }
+        else if (vis[v]) {
+            low[u] = min(low[u], num[v]);
+        }
+    }
+    ll tmp = -1;
+    if (num[u] == low[u]) {
+        tot++;
+        do {
+            tmp = st.top(); st.pop();
+            vis[tmp] = 0;
+            scc[tmp] = tot;
+        } while (u != tmp);
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

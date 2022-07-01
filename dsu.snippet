@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>dsu</Title>
+            <Shortcut>dsu</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+int f[200010];
+int find(int x) {
+    return f[x] == x ? x : f[x] = find(f[x]);
+}
+bool add(int x, int y) {
+    int fx = find(x), fy = find(y);
+    if (fx != fy) {
+        f[fx] = fy;
+        return true;
+    }
+    return false;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

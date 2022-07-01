@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>mat</Title>
+            <Shortcut>mat</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+queue<int> q;
+for (int i = 1; i <= n; i++) if (d[i] == 1) q.push(i);
+while (!q.empty()) {
+	int u = q.front();q.pop();
+	vis[u] = 1;
+	for (auto v : g[u]) {
+		if (vis[v]) continue;
+		d[v]--;
+		if (d[v] == 1) {
+			q.push(v);
+		}
+	}
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

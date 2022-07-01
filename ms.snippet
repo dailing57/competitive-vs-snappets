@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>ms</Title>
+            <Shortcut>ms</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+int trap(vector<int>& height) {
+    vector<int> stk;
+    int sz = height.size();
+    int ans = 0;
+    for(int i = 0; i < sz; i++) {
+        while(!stk.empty() && height[stk.back()] < height[i]) {
+            int top = stk.back();
+            stk.pop_back();
+            if(stk.empty()) continue;
+            ans += (min(height[i], height[stk.back()]) - height[top]) * (i - stk.back() - 1);            
+        }
+        stk.push_back(i);
+    }
+    return ans;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

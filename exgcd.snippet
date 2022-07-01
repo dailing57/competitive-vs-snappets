@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>exgcd</Title>
+            <Shortcut>exgcd</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+ll exgcd(ll a, ll b, ll& x, ll& y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+    ll r = exgcd(b, a % b, y, x);
+    y -= (a / b) * x;
+    return r;
+}
+ll getinv(ll a, ll b) {
+    ll x, y, d = exgcd(a, b, x, y);
+    return d == 1 ? (x % b + b) % b : -1;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

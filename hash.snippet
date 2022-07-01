@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>hash</Title>
+            <Shortcut>hash</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+typedef unsigned long long ull;
+const int seed = 135;
+const int p1 = 1e9 + 7, p2 = 1e9 + 9;
+ull xp1[maxn], xp2[maxn], xp[maxn];
+struct Hash {
+    static void init() {
+        xp1[0] = xp2[0] = xp[0] = 1;
+        for (int i = 1; i < maxn; ++i) {
+            xp1[i] = xp1[i - 1] * seed % p1;
+            xp2[i] = xp2[i - 1] * seed % p2;
+            xp[i] = xp[i - 1] * seed;
+        }
+    }
+
+    ull h[maxn];
+    ull build(int n, const char* s) {
+        ull r1 = 0, r2 = 0;
+        for (int i = 1; i <= n; i++) {
+            r1 = (r1 * seed + s[i]) % p1;
+            r2 = (r2 * seed + s[i]) % p2;
+            h[i] = (r1 << 32) | r2;
+        }
+        return h[n];
+    }
+
+    ull query(int l, int r) {
+        int len = r - l + 1;
+        unsigned int mask32 = ~(0u);
+        ull left1 = h[l - 1] >> 32, right1 = h[r] >> 32;
+        ull left2 = h[l - 1] & mask32, right2 = h[r] & mask32;
+        return (((right1 - left1 * xp1[len] % p1 + p1) % p1) << 32) |
+                (((right2 - left2 * xp2[len] % p2 + p2) % p2));
+    }
+} h;
+/*
+1000000007, 1000000009,
+998244353, 91815541,
+122420729, 917120411,
+687840301, 515880193,
+1222827239, 1610612741
+*/
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

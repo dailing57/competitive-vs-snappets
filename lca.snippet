@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>lca</Title>
+            <Shortcut>lca</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+ll lg[N], d[N];
+ll n;
+vector<ll> g[N];
+ll f[N][21];
+void dfs(ll u, ll fa) {
+    d[u] = d[fa] + 1;
+    f[u][0] = fa;
+    for (int i = 1; i <= lg[d[u]]; i++) {
+        f[u][i] = f[f[u][i - 1]][i - 1];
+    }
+    for (auto v : g[u]) {
+        if (v == fa) continue;
+        dfs(v, u);
+    }
+}
+ll lca(ll x, ll y) {
+    if (d[x] < d[y]) swap(x, y);
+    while (d[x] > d[y]) x = f[x][lg[d[x] - d[y]]];
+    if (x == y) return x;
+    for (int i = lg[d[x]]; i >= 0; i--) {
+        if (f[x][i] != f[y][i])
+            x = f[x][i], y = f[y][i];
+    }
+    return f[x][0];
+}
+void init() {
+    lg[0] = -1;
+    for (int i = 1; i < N; i++) {
+        lg[i] = lg[i / 2] + 1;
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
