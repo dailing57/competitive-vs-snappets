@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>centroid</Title>
+            <Shortcut>centroid</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+const int N = 2e4 + 5;
+int sz[N],wt[N];
+int n, rt;
+void getcentroid(int x, int fa,vector<vector<int> >& g)
+{
+    sz[x] = 1;
+    wt[x] = 0;
+    for (int i = 0; i < g[x].size(); i++)
+    {
+        int to = g[x][i];
+        if (to != fa)
+        {
+            getcentroid(to, x, g);
+            sz[x] += sz[to];
+            wt[x] = max(wt[x], sz[to]);
+        }
+    }
+    wt[x] = max(wt[x], n - sz[x]);
+    if (rt == 0 || wt[x] < wt[rt])//rt是重心编号
+        rt = x;
+}                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
