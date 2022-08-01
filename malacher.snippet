@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>malacher</Title>
+            <Shortcut>malacher</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+namespace manacher {
+    char s[maxn << 1] = "##";
+    int n, hw[maxn << 1];
+    void manacher() {
+        int maxr = 0, m = 0;
+        for (int i = 1; i < n; i++) {
+            if (i < maxr) hw[i] = min(hw[m * 2 - i], hw[m] + m - i);
+            else hw[i] = 1;
+            while (s[i + hw[i]] == s[i - hw[i]]) hw[i]++;
+            if (hw[i] + i > maxr) {
+                m = i; maxr = hw[i] + i;
+            }
+        }
+    }
+    void build(char a[]) {
+        int i;
+        for (i = 1; a[i]; i++) {
+            s[i * 2] = a[i];
+            s[i * 2 + 1] = '#';
+        }
+        n = i * 2; s[n] = 0;
+        manacher();
+    }
+    int check(int l, int r) {
+        // s[l...r] 是否为回文串
+        int mid = (l + r);
+        if (hw[mid] >= mid - 2 * l + 1) return 1;
+        else return 0;
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
