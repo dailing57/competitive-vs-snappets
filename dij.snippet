@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>dij</Title>
+            <Shortcut>dij</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+struct node {
+	ll id, e;
+	friend bool operator < (node a, node b) {
+		return a.e > b.e;
+	}
+};
+ll n, m;
+bool vis[N];
+ll dis[N], path[N];
+vector<pll> g[N];
+void dij() {
+	memset(dis, 0x3f, sizeof dis);
+	dis[1] = 0;
+	priority_queue<node> q;
+	q.push({ 1, 0 });
+	while (!q.empty()) {
+		node u = q.top(); q.pop();
+		if (vis[u.id]) continue;
+		vis[u.id] = 1;
+		for (auto v : g[u.id]) {
+			if (u.e + v.second < dis[v.first]) {
+				dis[v.first] = u.e + v.second;
+				path[v.first] = u.id;
+				q.push({ v.first, dis[v.first] });
+			}
+		}
+	}
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>mcmf</Title>
+            <Shortcut>mcmf</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+namespace MCMF
+{
+    const long long MAXN = 1e6 + 5, MAXM = 1e6 + 5, INF = inf;
+    long long head[MAXN], cnt = 1;
+    struct Edge
+    {
+        long long to, w, c, next;
+    } edges[MAXM * 2];
+    inline void add(long long from, long long to, long long w, long long c)
+    {
+        edges[++cnt] = { to, w, c, head[from] };
+        head[from] = cnt;
+    }
+    inline void addEdge(long long from, long long to, long long w, long long c)
+    {
+        add(from, to, w, c);
+        add(to, from, 0, -c);
+    }
+    long long s, t, dis[MAXN], cur[MAXN];
+    bool inq[MAXN], vis[MAXN];
+    queue<long long> Q;
+    bool SPFA()
+    {
+        while (!Q.empty())
+            Q.pop();
+        copy(head, head + MAXN, cur);
+        fill(dis, dis + MAXN, INF);
+        dis[s] = 0;
+        Q.push(s);
+        while (!Q.empty())
+        {
+            long long p = Q.front();
+            Q.pop();
+            inq[p] = 0;
+            for (long long e = head[p]; e != 0; e = edges[e].next)
+            {
+                long long to = edges[e].to, vol = edges[e].w;
+                if (vol > 0 && dis[to] > dis[p] + edges[e].c)
+                {
+                    dis[to] = dis[p] + edges[e].c;
+                    if (!inq[to])
+                    {
+                        Q.push(to);
+                        inq[to] = 1;
+                    }
+                }
+            }
+        }
+        return dis[t] != INF;
+    }
+    long long dfs(long long p = s, long long flow = INF)
+    {
+        if (p == t)
+            return flow;
+        vis[p] = 1;
+        long long rmn = flow;
+        for (long long eg = cur[p]; eg && rmn; eg = edges[eg].next)
+        {
+            cur[p] = eg;
+            long long to = edges[eg].to, vol = edges[eg].w;
+            if (vol > 0 && !vis[to] && dis[to] == dis[p] + edges[eg].c)
+            {
+                long long c = dfs(to, min(vol, rmn));
+                rmn -= c;
+                edges[eg].w -= c;
+                edges[eg ^ 1].w += c;
+            }
+        }
+        vis[p] = 0;
+        return flow - rmn;
+    }
+    long long maxflow, mincost;
+    inline void run(long long s, long long t)
+    {
+        MCMF::s = s, MCMF::t = t;
+        while (SPFA())
+        {
+            long long flow = dfs();
+            maxflow += flow;
+            mincost += dis[t] * flow;
+        }
+    }
+}
+
+using MCMF::addEdge;
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

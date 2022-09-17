@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>qpow</Title>
+            <Shortcut>qpow</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+ll qpow(ll m, ll k, ll mod) {
+    ll res = 1, t = m;
+    while (k) {
+        if (k & 1)
+            res = res * t % mod;
+        t = t * t % mod;
+        k >>= 1;
+    }
+    return res;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
