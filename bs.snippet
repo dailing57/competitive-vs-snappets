@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>bs</Title>
+            <Shortcut>bs</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+//求最小
+int getAnswer(int l, int r) {
+    int mid;
+    while(l < r) {
+        mid = (r + l) / 2;
+        if(check(mid)) {
+            r = mid;
+        }
+        else {
+            l = mid + 1;
+        }
+    }
+}
+//求最大
+int getAnswer(int l, int r) {
+    int mid;
+    while (l<r) {
+        mid = (r + l + 1) / 2;
+        if (check(mid)) {
+            l = mid;
+        }
+        else {
+            r = mid - 1;
+        }
+    }
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>bit</Title>
+            <Shortcut>bit</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+int tree[N];
+inline int lowbit(int x) { return x & -x; }
+inline void update(int i, int x) {
+    while (i < N) {
+        tree[i] += x;
+        i += lowbit(i);
+    }
+}
+inline int query(int i) {
+    int s = 0;
+    while (i > 0) {
+        s += tree[i];
+        i -= lowbit(i);
+    }
+    return s;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

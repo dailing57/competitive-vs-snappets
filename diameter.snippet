@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>diameter</Title>
+            <Shortcut>diameter</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+const int N = 1e4 + 5;
+int d[N], c;
+void dfs1(int x, int fa, vector<vector<int>>& a)
+{
+    for (int i = 0; i < a[x].size(); i++)
+    {
+        int to = a[x][i];
+        if (to != fa)
+        {
+            d[to] = d[x] + 1;
+            if (d[to] > d[c])
+                c = to;
+            dfs1(to, x, a);
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);cin.tie(nullptr);
+    int n;
+    cin >> n;
+    vector<vector<int>> a(n + 1);
+    rep(i, 1, n-1)
+    {
+        int u, v;
+        cin >> u >> v;
+        a[u].push_back(v);
+        a[v].push_back(u);
+    }
+    d[1] = 1;
+    dfs1(1, -1, a);
+    memset(d, 0, sizeof(d));
+    d[c] = 1;
+    dfs1(c, -1, a);
+    cout << d[c] - 1 << endl;
+}
+]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

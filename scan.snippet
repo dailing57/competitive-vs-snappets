@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>scan</Title>
+            <Shortcut>scan</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+struct Line {
+	ll l, r, h, mark;
+	friend bool operator < (Line a, Line b) {
+		return a.h < b.h;
+	}
+}line[N << 1];
+
+ll a[N];
+struct node {
+	ll len, sum;
+}tr[N << 2];
+ll X[N << 1];
+ll ls(ll x) { return x << 1; }
+ll rs(ll x) { return x << 1 | 1; }
+void pushup(ll p, ll l, ll r) {
+	if (tr[p].sum) tr[p].len = X[r + 1] - X[l];
+	else tr[p].len = tr[ls(p)].len + tr[rs(p)].len;
+}
+void build(ll p, ll l, ll r) {
+	tr[p].len = 0, tr[p].sum = 0;
+	if (l == r) return;
+	ll mid = (l + r) >> 1;
+	build(ls(p), l, mid);
+	build(rs(p), mid + 1, r);
+}
+void upd(ll nl, ll nr, ll l, ll r, ll p, ll d) {
+	if (X[r + 1] <= nl || nr <= X[l]) return;
+	if (nl <= X[l] && X[r + 1] <= nr) {
+		tr[p].sum += d;
+		pushup(p, l, r);
+		return;
+	}
+	ll mid = (l + r) >> 1;
+	upd(nl, nr, l, mid, ls(p), d);
+	upd(nl, nr, mid + 1, r, rs(p), d);
+	pushup(p, l, r);
+}
+
+
+int main() {
+#ifdef _DEBUG
+    freopen("in.txt", "r", stdin);
+#endif
+    ios::sync_with_stdio(false); cin.tie(nullptr);
+	ll n;
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		ll x1, y1, x2, y2;
+		cin >> x1 >> y1 >> x2 >> y2;
+		line[i * 2 - 1] = { x1, x2, y1, 1 };
+		line[i * 2] = { x1, x2, y2, -1 };
+		X[2 * i - 1] = x1, X[2 * i] = x2;
+	}
+	n *= 2;
+	sort(line + 1, line + n + 1);
+	sort(X + 1, X + n + 1);
+	ll tot = unique(X + 1, X + n + 1) - X - 1;
+	build(1, 1, tot - 1);
+	ll ans = 0;
+	for (int i = 1; i < n; i++) {
+		upd(line[i].l, line[i].r, 1, tot - 1, 1, line[i].mark);
+		ans += tr[1].len * (line[i + 1].h - line[i].h);
+	}
+	cout << ans << '\n';
+    return 0;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

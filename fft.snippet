@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>fft</Title>
+            <Shortcut>fft</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+const double PI = acos(-1.0);
+
+struct Complex {
+    double x, y;
+    Complex(double a = 0, double b = 0) :x(a), y(b) {}
+    Complex operator+(const Complex& b) { return { x + b.x, y + b.y }; }
+    Complex operator-(const Complex& b) { return { x - b.x, y - b.y }; }
+    Complex operator*(const Complex& b) {
+        return { x * b.x - y * b.y, x * b.y + y * b.x };
+    }
+} a[N], b[N]; int rev[N], ans[N];
+void fft(int n, Complex a[], int op = 1) {
+    for (int i = 0; i < n; i++) if (i < rev[i]) swap(a[i], a[rev[i]]);
+    for (int i = 1; i < n; i <<= 1) {
+        Complex t(cos(PI / i), op * sin(PI / i));
+        for (int j = 0; j < n; j += (i << 1)) {
+            Complex w(1, 0);
+            for (int k = 0; k < i; k++, w = w * t) {
+                Complex x = a[j + k], y = w * a[j + k + i];
+                a[j + k] = x + y; a[j + k + i] = x - y;
+            }
+        }
+    }
+    if (op == -1)
+        for (int i = 0; i < n; i++) a[i].x /= n, a[i].y /= n;
+}
+void mul(int n, Complex a[], int m, Complex b[], int ans[]) {
+    int l = 0, lim = 1; while (lim <= n + m) l++, lim <<= 1;
+    for (int i = 0; i < lim; i++)
+        rev[i] = (rev[i >> 1] >> 1) | ((i & 1) << (l - 1));
+    fft(lim, a); fft(lim, b);
+    for (int i = 0; i <= lim; i++) a[i] = a[i] * b[i];
+    fft(lim, a, -1);
+    for (int i = 0; i <= n + m; i++) ans[i] = (int)(a[i].x + 0.5);
+}
+]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

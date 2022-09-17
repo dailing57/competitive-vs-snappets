@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>poly</Title>
+            <Shortcut>poly</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+namespace Polygon {
+  // 多边形的面积
+  double area(const vector<Point>& a) {
+    double ans = 0;
+    for (int i = 0, sz = a.size(); i < sz; i++) {
+      ans += cross(a[i], a[(i + 1) % sz]);
+    }
+    return abs(ans / 2.0);
+  }
+  // 多边形以逆时针顺序给出
+  // 判断一个多边形是否为凸多边形
+  bool isConvex(vector<Point> a) {
+    int n = a.size(); a.push_back(a[0]); a.push_back(a[1]);
+    for (int i = 0; i < n; i++) {
+      if (clockwise(a[i], a[i + 1], a[i + 2]) == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+  // 多边形以逆时针顺序给出
+  // 判断点和多边形的关系, 2 内部, 1 边界, 0 外部
+  int contain(vector<Point> a, const Point& q) {
+    int pd = 0; a.push_back(a[0]);
+    for (int i = 1; i < (int)a.size(); i++) {
+      Point u = a[i - 1], v = a[i];
+      if (onSegment(u, v, q)) return 1;
+      if (dcmp(u.y, v.y) > 0) swap(u, v);
+      if (dcmp(u.y, q.y) >= 0 || dcmp(v.y, q.y) < 0) continue;
+      if (sign(cross(u - v, q - v)) < 0) pd ^= 1;
+    }
+    return pd * 2;
+  }
+
+  // 逆时针, 获得凸包, flag=0 不严格 flag=1 严格
+  vector<Point> convexHull(vector<Point> a, int flag = 1) {
+    int n = a.size();
+    if (n <= 1) return a;
+    sort(a.begin(), a.end());
+    vector<Point> ans(n * 2);
+    int now = -1;
+    for (int i = 0; i < n; i++) {
+      while (now > 0 && sign(cross(ans[now - 1], ans[now], a[i])) < flag) now--;
+      ans[++now] = a[i];
+    }
+    int pre = now;
+    for (int i = n - 2; i >= 0; i--) {
+      while (now > pre && sign(cross(ans[now - 1], ans[now], a[i])) < flag) now--;
+      ans[++now] = a[i];
+    }
+    return ans.resize(now), ans;
+  }
+  
+  // 旋转卡壳求凸包直径
+  double convexDiameter(vector<Point> a) {
+    int j = 0, n = a.size();
+    double ans = 0;
+    for (int i = 0; i < n; i++){
+        j = max(j, i);
+        while (1) {
+          double k1 = a[i].distance(a[j % n]);
+          double k2 = a[i].distance(a[(j + 1) % n]);
+          ans = max(ans, max(k1, k2));
+          if (k2 > k1) j++;
+          else break;
+        }
+    }
+    return ans;
+  }
+}
+using namespace Polygon;
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

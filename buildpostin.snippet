@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>buildpostin</Title>
+            <Shortcut>buildpostin</Shortcut>
+        </Header>
+        <Snippet>
+            <Code Language="CPP">
+                <![CDATA[
+struct TreeNode
+{
+    struct TreeNode* left;
+    struct TreeNode* right;
+    char  elem;
+};
+
+TreeNode* BinaryTreeFromOrderings(char* inorder, char* aftorder, int length)
+{
+    if (length == 0)
+    {
+        return NULL;
+    }
+    TreeNode* node = new TreeNode;//Noice that [new] should be written out.
+    node->elem = *(aftorder + length - 1);
+    std::cout << node->elem << std::endl;
+    int rootIndex = 0;
+    for (; rootIndex < length; rootIndex++)//a variation of the loop
+    {
+        if (inorder[rootIndex] == *(aftorder + length - 1))
+            break;
+    }
+    node->left = BinaryTreeFromOrderings(inorder, aftorder, rootIndex);
+    node->right = BinaryTreeFromOrderings(inorder + rootIndex + 1, aftorder + rootIndex, length - (rootIndex + 1));
+
+    return node;
+}
+                ]]>
+            </Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>
